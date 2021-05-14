@@ -11,31 +11,19 @@ class PokemonList extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchPokemonList('https://pokemon-academy-api-pbr.herokuapp.com/pokemons/list')
+        this.fetchPokemonList('https://java-pokemon-academy-api.herokuapp.com/pokemons/list')
     }
 
     fetchPokemonList = (url) => {
-        const token = localStorage.getItem('token');
-        fetch(url, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response=>{
-            if(response.status >= 400) {
-                throw new Error("User not authorized!");
-            }
-            return response;
-        })
+    
+        fetch(url)
         .then(response => response.json())
         .then(jsonResponse => {
             console.log(jsonResponse);
             const { results, next, prev } = jsonResponse; 
             this.setState({ pokemonList: results, searchResult: results, next: next, prev: prev });
             this.props.changeLoadingIndicator(false);
-        }).catch(error=>{
-            this.props.history.push({pathname: '/login'})
+    
         })
     }
 
